@@ -26,6 +26,16 @@ RBTree::~RBTree(){
 /*bool isBalanced(node* cur){
 
 }*/
+
+//gets grandparent of node*
+node* RBTree::getGramp(node* n){
+  node* parent = getParent(n);
+  if(parent != NULL){
+    parent = getParent(parent);
+  }
+  return parent;
+}
+
 //returns uncle of given node
 node* RBTree::getUncle(node* n){
   node* parent = getParent(n);
@@ -87,6 +97,7 @@ int RBTree::insert(int data){
   newnode->data = data;
   newnode->left = NULL;
   newnode->right = NULL;
+  newnode->color = 'R';
   //if head is null, just make it head
   if(head == NULL){
     head = newnode;

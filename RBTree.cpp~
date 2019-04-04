@@ -1,6 +1,14 @@
+/*Class RBTree, implementation of a Red Black Tree
+ *This Class can currently add nodes to tree, working on balancing
+ *Author: Grace Hunter
+ *Date: 26 March 2019
+ */
+
 #include <cstring>
 #include <iostream>
 #include "RBTree.h"
+
+using namespace std;
 
 //constuctor
 RBTree::RBTree(){
@@ -8,10 +16,69 @@ RBTree::RBTree(){
 }
 
 //destructor
-RBTree::~RBSrchTree(){
-  while(head != NULL){
-    remove(head->data);
+RBTree::~RBTree(){
+  //while(head != NULL){
+  //remove(head->data);
+  //}
+}
+
+//returns true if all trees below node have same black height
+/*bool isBalanced(node* cur){
+
+}*/
+//returns uncle of given node
+node* RBTree::getUncle(node* n){
+  node* parent = getParent(n);
+  
+  //uncle is parent's sibling
+  if(parent != NULL){
+    return getSibling(parent);
   }
+  else{
+    return NULL;
+  }
+}
+
+//returns the sibling of a given node*
+node* RBTree::getSibling(node* n){
+  //get parent
+  node* parent = getParent(n);
+
+  //get sibling
+  //if parent exists
+  if(parent != NULL){
+    if(parent->right == n){
+      return parent->left;
+    }
+    else{
+      return parent->right;
+    }
+  }
+  //else return NULL
+  else{
+    return NULL;
+  }
+}
+
+//returns the parent of a given node*
+node* RBTree::getParent(node* n){
+  bool found = false;
+  node* parent = NULL;
+  node* cur = head;
+  while(!found){
+    if(cur == n){
+      found = true;
+    }
+    else if(cur->data >= n->data){
+      parent = cur;
+      cur = cur->left;
+    }
+    else if(cur->data < n->data){
+      parent = cur;
+      cur = cur->right;
+    }
+  }
+  return parent;
 }
 
 //creates node from data value, then calls recursive insert to insert node
@@ -20,12 +87,15 @@ int RBTree::insert(int data){
   newnode->data = data;
   newnode->left = NULL;
   newnode->right = NULL;
+  newnode->color = 'R';
   //if head is null, just make it head
   if(head == NULL){
     head = newnode;
   }
   else{
     insert(newnode, head);
+    node* parent = getParent(newnode);
+    cout << "parent of new node: " << parent->data << endl;
   }
   return 0;
 }
