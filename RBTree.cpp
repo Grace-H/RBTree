@@ -22,27 +22,77 @@ RBTree::~RBTree(){
   //}
 }
 
-//returns true if all trees below node have same black height
-/*bool isBalanced(node* cur){
+//rotate right with given node as root
+int RBTree::rotateR(node* root){
+  node* pivot = root->left;
+  //change root's parent
+  //if root is head
+  if(root == head){
+    head = pivot;
+  }
+  //if root is right child
+  else if(root->parent->right == root){
+    root->parent->right = pivot;
+  }
+  //if root is left child
+  else{
+    root->parent->left = pivot;
+  }
+  //pass pivot's right child
+  root->left = pivot->right;
+  if(root->left != NULL){
+    root->left->parent = root;
+  }
+  //change root to pivot's child
+  pivot->parent = root->parent;  
+  root->parent = pivot;
+  pivot->right = root;
+  return 0;
+}
 
-}*/
+//rotate left with given node as root
+int RBTree::rotateL(node* root){
+  node* pivot = root->right;
+  //change root's parent
+  //if root is head
+  if(root == head){
+    head = pivot;
+  }
+  //if root is right child
+  else if(root->parent->right == root){
+    root->parent->right = pivot;
+  }
+  //if root is left child
+  else{
+    root->parent->left = pivot;
+  }
+  //pass pivot's left child
+  root->right = pivot->left;
+  if(root->right != NULL){
+    root->right->parent = root;
+  }
+  //change root to pivot's child
+  pivot->parent = root->parent;  
+  root->parent = pivot;
+  pivot->left = root;
+  return 0;
+}
 
 //gets grandparent of node*
 node* RBTree::getGramp(node* n){
-  node* parent = getParent(n);
-  if(parent != NULL){
-    parent = getParent(parent);
+  if(n->parent != NULL){
+    return n->parent->parent;
   }
-  return parent;
+  else{
+    return NULL;
+  }
 }
 
 //returns uncle of given node
 node* RBTree::getUncle(node* n){
-  node* parent = getParent(n);
-  
   //uncle is parent's sibling
-  if(parent != NULL){
-    return getSibling(parent);
+  if(n->parent != NULL){
+    return getSibling(n->parent);
   }
   else{
     return NULL;
@@ -51,17 +101,14 @@ node* RBTree::getUncle(node* n){
 
 //returns the sibling of a given node*
 node* RBTree::getSibling(node* n){
-  //get parent
-  node* parent = getParent(n);
-
   //get sibling
   //if parent exists
-  if(parent != NULL){
-    if(parent->right == n){
-      return parent->left;
+  if(n->parent != NULL){
+    if(n->parent->right == n){
+      return n->parent->left;
     }
     else{
-      return parent->right;
+      return n->parent->right;
     }
   }
   //else return NULL
@@ -98,16 +145,41 @@ int RBTree::insert(int data){
   newnode->left = NULL;
   newnode->right = NULL;
   newnode->color = 'R';
-  //if head is null, just make it head
+  newnode->parent = NULL;  
+  //if head is null, just make it head (case1)
   if(head == NULL){
     head = newnode;
+    newnode->color = 'B';
   }
   else{
     insert(newnode, head);
-    node* parent = getParent(newnode);
-    cout << "parent of new node: " << parent->data << endl;
+    newnode->parent = getParent(newnode);
+    cout << "parent of new node: " << newnode->parent->data << endl;
+    //if parent is red & uncle is NULL (black) (case 4)
+    if(newnode->parent->color == 'R' && getUncle(newnode) == NULL){
+      cout << "parent is red and uncle is NULL" << endl;
+    }
+    //else if parent is red & uncle is black (case 4)
+    else if(newnode->parent->color == 'R' && getUncle(newnode)->color == 'B'){
+      cout << "parent is R & uncle is black" << endl;
+    
+    }
+    //else if parent is red & uncle is red (case 3)
+    else if(newnode->parent->color == 'R' && getUncle(newnode)->color == 'R'){
+      cout << "parent is R, uncle is R" << endl;
+      casePRUR(newnode);
+    }
   }
   return 0;
+}
+
+//determine how to fix tree
+int RBTree::repairTree(node* n){
+
+}
+//insert case 3: parent & uncle == red
+int RBTree::casePRUR(node* n){
+
 }
 
 //inserts a node using recursion

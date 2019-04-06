@@ -137,14 +137,14 @@ int insert(RBTree* tree, char* nums){
   //get token
   int cur = 0;
   char* str;
-  str = strtok(nums, " ");
+  str = strtok(nums, ",");
   
   while(str != NULL){
     //convert to int  
     cur = atoi(str);
     //insert into heap  
     tree->insert(cur);
-    str = strtok(NULL, " ");
+    str = strtok(NULL, ",");
   }
   tree->visualize();
   return 0;

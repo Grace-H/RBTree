@@ -26,6 +26,16 @@ RBTree::~RBTree(){
 /*bool isBalanced(node* cur){
 
 }*/
+
+//gets grandparent of node*
+node* RBTree::getGramp(node* n){
+  node* parent = getParent(n);
+  if(parent != NULL){
+    parent = getParent(parent);
+  }
+  return parent;
+}
+
 //returns uncle of given node
 node* RBTree::getUncle(node* n){
   node* parent = getParent(n);
