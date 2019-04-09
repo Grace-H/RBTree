@@ -1,5 +1,5 @@
-/*Class RBTree, implementation of a Red Black Tree
- *This Class can currently add nodes to tree, working on balancing
+/*Class RBTree, implementation of a Red-Black Tree
+ *Cases were learned from https://en.wikipedia.org/wiki/Red-Black_Tree
  *Author: Grace Hunter
  *Date: 26 March 2019
  */
@@ -154,19 +154,16 @@ int RBTree::insert(int data){
   else{
     insert(newnode, head);
     newnode->parent = getParent(newnode);
-    cout << "parent of new node: " << newnode->parent->data << endl;
     //if parent is red & uncle is NULL (black) (case 4)
     if(newnode->parent->color == 'R' && getUncle(newnode) == NULL){
-      cout << "parent is red and uncle is NULL" << endl;
+      casePRUB(newnode);
     }
     //else if parent is red & uncle is black (case 4)
     else if(newnode->parent->color == 'R' && getUncle(newnode)->color == 'B'){
-      cout << "parent is R & uncle is black" << endl;
-    
+      casePRUB(newnode);
     }
     //else if parent is red & uncle is red (case 3)
     else if(newnode->parent->color == 'R' && getUncle(newnode)->color == 'R'){
-      cout << "parent is R, uncle is R" << endl;
       casePRUR(newnode);
     }
   }
@@ -175,11 +172,64 @@ int RBTree::insert(int data){
 
 //determine how to fix tree
 int RBTree::repairTree(node* n){
-
+  //if node is head (case 1)
+  if(n == head){
+    n->color = 'B';
+  }
+  //if parent is black (case 2)
+  else if(n->parent->color == 'B'){
+    return 0;
+  }
+  //if parent is red & uncle is NULL (black) (case 4)
+  else if(n->parent->color == 'R' && getUncle(n) == NULL){
+    casePRUB(n);
+  }
+  //else if parent is red & uncle is black (case 4)
+  else if(n->parent->color == 'R' && getUncle(n)->color == 'B'){
+    casePRUB(n);
+  }
+  //else if parent is red & uncle is red (case 3)
+  else if(n->parent->color == 'R' && getUncle(n)->color == 'R'){
+    casePRUR(n);
+  }
+  return 0;
 }
+
 //insert case 3: parent & uncle == red
 int RBTree::casePRUR(node* n){
+  n->parent->color = 'B';
+  getUncle(n)->color = 'B';
+  getGramp(n)->color = 'R';
+  repairTree(getGramp(n));
+  return 0;
+}
 
+//insert case 4: parent == red & uncle == black
+int RBTree::casePRUB(node* n){
+  //check if node is inside tree
+  //if node is parent is left child and node is right child
+  if(getGramp(n)->left == n->parent && n->parent->right == n){
+    rotateL(n->parent);
+    n = n->left;
+  }
+  //else if node is right child and parent is left child
+  else if(getGramp(n)->right == n->parent && n->parent->left == n){
+    rotateR(n->parent);
+    n = n->right;
+  }
+
+  //rotate tree
+  if(n->parent->left == n){
+    rotateR(getGramp(n));
+  }
+  else{
+    rotateL(getGramp(n));
+  }
+
+  //change colors
+  n->parent->color = 'B';
+  getSibling(n)->color = 'R';
+  return 0;
 }
 
 //inserts a node using recursion

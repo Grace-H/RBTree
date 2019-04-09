@@ -12,7 +12,7 @@
 
 using namespace std;
 
-//int remove(BiSrchTree* tree, char* nums);
+//int remove(RBTree* tree, char* nums);
 int insert(RBTree* tree, char* nums);
 
 int main(){
@@ -27,7 +27,7 @@ int main(){
   strcpy(addstr, "ADD");
   strcpy(printstr, "PRINT");
   //strcpy(removestr, "REMOVE");
-  strcpy(quitstr, "QUIT");
+v  strcpy(quitstr, "QUIT");
   
   char* input = new char[256];
   char* nums = new char[100000];
@@ -115,7 +115,7 @@ int main(){
 
 /*
 //remove numbers in tree from char* array
-int remove(BiSrchTree* tree, char* nums){
+int remove(RBTree* tree, char* nums){
   //get token
   int cur = 0;
   char* str;

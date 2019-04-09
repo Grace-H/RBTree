@@ -27,8 +27,9 @@ class RBTree{
   node* getSibling(node* n);    //get sibling of n
   node* getUncle(node* n);      //get uncle of n
   int insert(int data);         //create a node and add to tree
-  int repairTree(node* n)       //diagnose tree
+  int repairTree(node* n);      //diagnose tree
   int casePRUR(node* n);        //insert case 3: parent & uncle == red
+  int casePRUB(node* n);        //insert case 4: parent == red & uncle == black
   int insert(node* newnode, node* current); //insert a node recursively
   int contains(int data, node* current);  //check if tree contains node
   int visualize();              //calls other visualize function
