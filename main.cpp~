@@ -27,7 +27,7 @@ int main(){
   strcpy(addstr, "ADD");
   strcpy(printstr, "PRINT");
   //strcpy(removestr, "REMOVE");
-  strcpy(quitstr, "QUIT");
+v  strcpy(quitstr, "QUIT");
   
   char* input = new char[256];
   char* nums = new char[100000];
