@@ -138,6 +138,32 @@ node* RBTree::getParent(node* n){
   return parent;
 }
 
+//remove node
+int RBTree::remove(int data){
+  //get node
+  node* todelete = locate(head, data);
+
+  //if todelete DNE
+  if(todelete == NULL){
+    cout << "Does not exist: " << data << endl;
+    return 0;
+  }
+
+  //if todelete has no children
+  if(todelete->left == NULL && todelete->right == NULL){
+
+  }
+  
+  //if todelete has no left child
+  else if(todelete->left == NULL){
+
+  }
+  
+  //if todelete has a left child
+  node* replace = todelete->left;
+  return 0;
+}
+
 //creates node from data value, then calls recursive insert to insert node
 int RBTree::insert(int data){
   node* newnode = new node;
@@ -156,15 +182,15 @@ int RBTree::insert(int data){
     newnode->parent = getParent(newnode);
     //if parent is red & uncle is NULL (black) (case 4)
     if(newnode->parent->color == 'R' && getUncle(newnode) == NULL){
-      casePRUB(newnode);
+      icasePRUB(newnode);
     }
     //else if parent is red & uncle is black (case 4)
     else if(newnode->parent->color == 'R' && getUncle(newnode)->color == 'B'){
-      casePRUB(newnode);
+      icasePRUB(newnode);
     }
     //else if parent is red & uncle is red (case 3)
     else if(newnode->parent->color == 'R' && getUncle(newnode)->color == 'R'){
-      casePRUR(newnode);
+      icasePRUR(newnode);
     }
   }
   return 0;
@@ -182,21 +208,21 @@ int RBTree::repairTree(node* n){
   }
   //if parent is red & uncle is NULL (black) (case 4)
   else if(n->parent->color == 'R' && getUncle(n) == NULL){
-    casePRUB(n);
+    icasePRUB(n);
   }
   //else if parent is red & uncle is black (case 4)
   else if(n->parent->color == 'R' && getUncle(n)->color == 'B'){
-    casePRUB(n);
+    icasePRUB(n);
   }
   //else if parent is red & uncle is red (case 3)
   else if(n->parent->color == 'R' && getUncle(n)->color == 'R'){
-    casePRUR(n);
+    icasePRUR(n);
   }
   return 0;
 }
 
 //insert case 3: parent & uncle == red
-int RBTree::casePRUR(node* n){
+int RBTree::icasePRUR(node* n){
   n->parent->color = 'B';
   getUncle(n)->color = 'B';
   getGramp(n)->color = 'R';
@@ -205,7 +231,7 @@ int RBTree::casePRUR(node* n){
 }
 
 //insert case 4: parent == red & uncle == black
-int RBTree::casePRUB(node* n){
+int RBTree::icasePRUB(node* n){
   //check if node is inside tree
   //if node is parent is left child and node is right child
   if(getGramp(n)->left == n->parent && n->parent->right == n){
@@ -257,6 +283,23 @@ int RBTree::insert(node* newnode, node* current){
     }
   }
   return 0;
+}
+
+
+//finds and returns a node in the tree using recursion
+node* RBTree::locate(node* cur, int data){
+  if(cur == NULL){
+    return NULL;
+  }
+  else if(data == cur->data){
+    return cur;
+  }
+  else if(data <= cur->data){
+    locate(data, cur->left);
+  }
+  else if(data > cur->data){
+    insert(data, cur->right);
+  }
 }
 
 //determines whether data value exists in tree below/including node* cur
