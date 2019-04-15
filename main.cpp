@@ -14,19 +14,20 @@ using namespace std;
 
 //int remove(RBTree* tree, char* nums);
 int insert(RBTree* tree, char* nums);
+int remove(RBTree* tree, char* nums);
 
 int main(){
   //commands
   char* readstr = new char[20];
   char* addstr = new char[20];
   char* printstr = new char[20];
-  //char* removestr = new char[20];
+  char* removestr = new char[20];
   char* quitstr = new char[20];
   
   strcpy(readstr, "READ");
   strcpy(addstr, "ADD");
   strcpy(printstr, "PRINT");
-  //strcpy(removestr, "REMOVE");
+  strcpy(removestr, "REMOVE");
   strcpy(quitstr, "QUIT");
   
   char* input = new char[256];
@@ -80,7 +81,7 @@ int main(){
       //add to tree
       insert(tree, nums);
     }
-    /*
+    
     //remove from tree
     else if(strcmp(removestr, input) == 0){
       cout << "Enter spaced-seperated numbers to remove from tree: " << endl;
@@ -89,7 +90,7 @@ int main(){
       //remove
       remove(tree, nums);
     }
-    */
+    
     //print tree
     else if(strcmp(printstr, input) == 0){
       tree->visualize();
@@ -113,25 +114,25 @@ int main(){
   return 0;
 }
 
-/*
+
 //remove numbers in tree from char* array
 int remove(RBTree* tree, char* nums){
   //get token
   int cur = 0;
   char* str;
-  str = strtok(nums, " ");
+  str = strtok(nums, ",");
   
   while(str != NULL){
     //convert to int  
     cur = atoi(str);
     //insert into heap  
     tree->remove(cur);
-    str = strtok(NULL, " ");
+    str = strtok(NULL, ",");
   }
   tree->visualize();
   return 0;
 }
-*/
+
 //adds numbers to tree from a char* array
 int insert(RBTree* tree, char* nums){
   //get token
