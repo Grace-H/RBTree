@@ -12,7 +12,7 @@
 
 using namespace std;
 
-//int remove(RBTree* tree, char* nums);
+int search(RBTree* tree, char* nums);
 int insert(RBTree* tree, char* nums);
 int remove(RBTree* tree, char* nums);
 
@@ -22,12 +22,14 @@ int main(){
   char* addstr = new char[20];
   char* printstr = new char[20];
   char* removestr = new char[20];
+  char* searchstr = new char[20];
   char* quitstr = new char[20];
   
   strcpy(readstr, "READ");
   strcpy(addstr, "ADD");
   strcpy(printstr, "PRINT");
   strcpy(removestr, "REMOVE");
+  strcpy(searchstr, "SEARCH");
   strcpy(quitstr, "QUIT");
   
   char* input = new char[256];
@@ -35,12 +37,14 @@ int main(){
 
   //initialize tree
   RBTree* tree = new RBTree();
+
+  cout << "note: commands do not have to be uppercase" << endl;
   
   //keep asking for command until user asks to quit
   bool go = true;
   while(go){
     //get input
-    cout << "'READ' 'ADD' 'PRINT' or 'QUIT'?" << endl;
+    cout << "'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?" << endl;
     cin.get(input, 256);
     cin.get();
 
@@ -95,6 +99,17 @@ int main(){
     else if(strcmp(printstr, input) == 0){
       tree->visualize();
     }
+
+    else if(strcmp(searchstr, input) == 0){
+
+      //create char* from commamd line
+      cout << "Enter number(s) (If more than one seperate by commas):" << endl;
+      cin.get(nums, 100000);
+      cin.get();
+
+      //search tree for nums
+      search(tree, nums);
+    }
     //quit
     else if(strcmp(quitstr, input) == 0){
       go = false;
@@ -114,7 +129,22 @@ int main(){
   return 0;
 }
 
-
+//find if a number exists in tree
+int search(RBTree* tree, char* nums){
+  //get token
+  int cur = 0;
+  char* str;
+  str = strtok(nums, ",");
+  
+  while(str != NULL){
+    //convert to int  
+    cur = atoi(str);
+    //ask tree if exists  
+    tree->search(cur);
+    str = strtok(NULL, ",");
+  }
+}
+  
 //remove numbers in tree from char* array
 int remove(RBTree* tree, char* nums){
   //get token
@@ -125,7 +155,7 @@ int remove(RBTree* tree, char* nums){
   while(str != NULL){
     //convert to int  
     cur = atoi(str);
-    //insert into heap  
+    //remove from tree
     tree->remove(cur);
     str = strtok(NULL, ",");
   }
@@ -143,7 +173,7 @@ int insert(RBTree* tree, char* nums){
   while(str != NULL){
     //convert to int  
     cur = atoi(str);
-    //insert into heap  
+    //insert into tree  
     tree->insert(cur);
     str = strtok(NULL, ",");
   }

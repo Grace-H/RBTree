@@ -140,7 +140,7 @@ node* RBTree::getParent(node* n){
 
 //remove node
 int RBTree::remove(int data){
-  /* //get node with value
+  //get node with value
   node* found = locate(data, head);
   cout << "found: " << found->data << endl;
   //find node to delete and child
@@ -160,8 +160,9 @@ int RBTree::remove(int data){
   cout << "todelete: " << todelete->data << endl;
   cout << "found: " << found->data << endl;
   cout << "child: " << child->data << endl;
-  
-  //if todelete is red
+
+  //seg fault
+  //if todelete  or it's parent is red
   if(todelete->color == 'R'){
     //change child & parent pointers
     if(todelete->parent->left == todelete){
@@ -173,11 +174,15 @@ int RBTree::remove(int data){
     if(child != NULL){
       child->parent = todelete->parent;
     }
+    
+    //paint node black
+    child->color = 'B';
+
     delete todelete;
   }
-  //if todelete is black-->child is now doubleblack
-  else{
-   //change child & parent pointers
+
+  else if(todelete->parent->color == 'R'){
+    //change child & parent pointers
     if(todelete->parent->left == todelete){
       todelete->parent->left = child;
     }
@@ -187,20 +192,53 @@ int RBTree::remove(int data){
     if(child != NULL){
       child->parent = todelete->parent;
     }
+    
+    //paint node black
+    child->color = 'B';
+
+    delete todelete;
+  }
+  
+  //if todelete is black-->child is now doubleblack
+  else{
+    cout << "todelete is black" << endl;
+    //get family members in case child is NULL
+    node* parent = todelete->parent;
+    node* sibling;
+    if(parent->right == todelete){
+      sibling = parent->left;
+    }
+    else{
+      sibling = parent->right;
+    }
+    
+    //change child & parent pointers
+    if(parent != NULL){
+      if(todelete->parent->left == todelete){
+	todelete->parent->left = child;
+      }
+      else{
+	todelete->parent->right = child;
+      }
+    }
+    if(child != NULL){
+      child->parent = todelete->parent;
+    }
     delete todelete;
 
-    node* sibling = getSibling(child);
-    //child is double black
-    //child is NULL
-    //if sibling is black with NULL children
-    if(sibling->color == 'B' && sibling->left == NULL && sibling->right == NULL){
+    //CHILD IS DOUBLE BLACK
+    //case 1: node is new head
+    if(parent == NULL){
+      head = child;
     }
+    
+    //if sibling is black with NULL children
+    //if sibling is black with 
     //if sibling is black with black children
     //if sibling is black with red child
     //red sibling
     //
   }
-  */
   return 0;
 }
 
@@ -339,6 +377,17 @@ node* RBTree::locate(int data, node* cur){
   }
   else if(data > cur->data){
     locate(data, cur->right);
+  }
+}
+
+//prints out if given number exists in tree
+int RBTree::search(int data){
+  int exists = contains(data, head);
+  if(exists == 0){
+    cout << "Exists: " << data << endl;
+  }
+  else{
+    cout << "Does not exist: " << data << endl;
   }
 }
 

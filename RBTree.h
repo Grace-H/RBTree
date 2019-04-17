@@ -33,6 +33,7 @@ class RBTree{
   int icasePRUB(node* n);       //insert case 4: parent == red & uncle == black
   int insert(node* newnode, node* current); //insert a node recursively
   node* locate(int data, node* head);        //finds and returns node with data
+  int search(int data);         //prints whether number exists in tree
   int contains(int data, node* current);    //check if tree contains node
   int visualize();              //calls other visualize function
   int visualize(node* current, int level);  //print out tree recursively
