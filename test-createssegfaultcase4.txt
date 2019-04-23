@@ -1,0 +1,164 @@
+//creates seg fault in case 4
+
+ ./a
+note: commands do not have to be uppercase
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+add
+Enter number(s) (If more than one seperate by commas):
+3,2,4,5,1,1,24,46,6,245
+            245R
+        46B
+    24R
+        6B
+5B
+        4B
+    3R
+            2R
+        1B
+            1R
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+read
+Enter complete file name. Numbers must be seperated by commas
+test.txt
+2,3,4,5,13,245,32,44,567,87,54,2,3,8,7,9,65,43
+                567R
+            245B
+        245B
+                87B
+                    65R
+            54R
+                46B
+    44R
+                43R
+            32B
+        24B
+                13B
+                    9R
+            8R
+                    7R
+                6B
+5B
+                5R
+            4B
+                4R
+        3R
+            3B
+                3R
+    2B
+            2B
+                2R
+        1R
+            1B
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+remove
+Enter spaced-seperated numbers to remove from tree:
+11,1,1,1,1,1,1,1
+Does not exist: 11
+Does not exist: 1
+Does not exist: 1
+Does not exist: 1
+Does not exist: 1
+Does not exist: 1
+                567R
+            245B
+        245B
+                87B
+                    65R
+            54R
+                46B
+    44R
+                43R
+            32B
+        24B
+                13B
+                    9R
+            8R
+                    7R
+                6B
+5B
+                5R
+            4B
+                4R
+        3R
+            3B
+                3R
+    2B
+        2B
+            2R
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+remove
+Enter spaced-separated numbers to remove from tree:
+2,2,2,3,3,3,4,4,5,6,7,8,9
+                567R
+            245B
+        245B
+                87B
+                    65R
+            54R
+                46B
+    44R
+            32B
+        24B
+            13B
+5B
+        4B
+    2B
+        2B
+            2R
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+search
+Enter number(s) (If more than one seperate by commas):
+4,3,5,2,2,2
+Exists: 4
+Does not exist: 3
+Exists: 5
+Exists: 2
+Exists: 2
+Exists: 2
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+remove
+Enter spaced-seperated numbers to remove from tree:
+2,2
+                567R
+            245B
+        245B
+                87B
+                    65R
+            54R
+                46B
+    44R
+                43R
+            32B
+        24B
+            13B
+5B
+        4B
+    2B
+        2B
+            2R
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+remove
+Enter spaced-seperated numbers to remove from tree:
+2
+                567R
+            245B
+        245B
+                87B
+                    65R
+            54R
+                46B
+    44R
+                43R
+            32B
+        24B
+            13B
+5B
+        4B
+    2B
+        2B
+            2R
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+quit
+not an option
+'READ' 'ADD' 'PRINT' 'REMOVE' 'SEARCH' or 'QUIT'?
+quit

@@ -355,6 +355,7 @@ int RBTree::rcasePBSBsBsB(node* n, node* p, node* s){
 }
 
 //remove case 4: parent is red, but s and s's children are black
+//seg fault somewhere in here with test case
 int RBTree::rcasePRSBsBsB(node* n, node* p, node* s){
   cout << "rcasePRSBsBsB()" << endl;
   if(p == NULL){

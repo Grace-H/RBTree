@@ -63,7 +63,7 @@ int main(){
       }
     
       //create char* from commamd line
-      cout << "Enter number(s) (If more than one seperate by commas):" << endl;
+      cout << "Enter number(s) (If more than one separate by commas):" << endl;
       cin.get(nums, 100000);
       cin.get();
 
@@ -72,7 +72,7 @@ int main(){
     }
     //read
     else if(strcmp(readstr, input) == 0){
-      cout << "Enter complete file name. Numbers must be seperated by commas" << endl;
+      cout << "Enter complete file name. Numbers must be separated by commas" << endl;
       cin.get(input, 256);
       cin.get();
 
@@ -88,7 +88,7 @@ int main(){
     
     //remove from tree
     else if(strcmp(removestr, input) == 0){
-      cout << "Enter spaced-seperated numbers to remove from tree: " << endl;
+      cout << "Enter comma-seperated numbers to remove from tree: " << endl;
       cin.get(nums, 100000);
       cin.get();
       //remove
@@ -103,7 +103,7 @@ int main(){
     else if(strcmp(searchstr, input) == 0){
 
       //create char* from commamd line
-      cout << "Enter number(s) (If more than one seperate by commas):" << endl;
+      cout << "Enter number(s) (If more than one separate by commas):" << endl;
       cin.get(nums, 100000);
       cin.get();
 
