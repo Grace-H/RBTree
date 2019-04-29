@@ -220,7 +220,12 @@ int RBTree::remove(int data){
 	//CHILD IS DOUBLE BLACK
 	//begin cases
 	cout << "beginning cases" << endl;
-	rcasePNULL(child, parent, sibling);
+	if(child == NULL){
+	  rcasePNULL(parent, parent->parent, getSibling(parent));
+	}
+	else{
+	  rcasePNULL(child, parent, sibling);
+	}
       }
 
       else if(todelete->parent->color == 'B'){
@@ -253,7 +258,12 @@ cout << "todelete's parent is black" << endl;
 
 	//begin cases
 	cout << "parent is black, beginning cases" << endl;
-	rcasePNULL(child, parent, sibling);
+	if(child == NULL){
+	  rcasePNULL(parent, parent->parent, getSibling(parent));
+	}
+	else{
+	  rcasePNULL(child, parent, sibling);
+	}
       }
       
       //if todelete's parent is red
@@ -275,8 +285,7 @@ cout << "todelete's parent is black" << endl;
 	  child->color = 'B';
 	}
 	else{
-	  cout << "remove(): painting parent black" << endl;
-	  todelete->parent->color = 'B';
+	  rcaseNoChild(todelete->parent);
 	}
 	delete todelete;
       }
@@ -284,6 +293,54 @@ cout << "todelete's parent is black" << endl;
   }
   else{
     cout << "Does not exist: " << data << endl;
+  }
+  return 0;
+}
+
+//if todelete has no children and parent is red
+int RBTree::rcaseNoChild(node* p){
+  //left child was removed
+  if(p->left == NULL){
+    //right is NULL too
+    if(p->right == NULL){
+      p->color = 'B';
+    }
+    else{
+      //rotate subtree so rotation happens correctly
+      if(p->right->left != NULL){
+	rotateR(p->right);
+      }
+      rotateL(p);
+      //adjust colors
+      node* s = getSibling(p);
+      if(s == NULL){
+	p->parent->color = 'B';
+	p->color = 'R';
+      }
+      else{
+	s->color = 'B';
+	p->color = 'B';
+	p->parent->color = 'R';
+      }
+    }
+  }
+  else{
+    //rotate subtree
+    if(p->left->right != NULL){
+      rotateL(p->left);
+    }
+    rotateR(p);
+    //adjust colors
+    node* s = getSibling(p);
+    if(s == NULL){
+      p->parent->color = 'B';
+      p->color = 'R';
+    }
+    else{
+      s->color = 'B';
+      p->color = 'B';
+      p->parent->color = 'R';
+    }
   }
   return 0;
 }

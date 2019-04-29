@@ -27,6 +27,7 @@ class RBTree{
   node* getSibling(node* n);                    //get sibling of n
   node* getUncle(node* n);                      //get uncle of n
   int remove(int data);                         //locates and removes node with given data
+  int rcaseNoChild(node* parent);               //the node to delete has no children (assumes parent is red)
   int rcasePNULL(node* n, node* p, node* s);    //remove case 1: new head
   int rcaseSR(node* n, node* p, node* s);       //remove case 2: sibling is red
   int rcasePBSBsBsB(node* n, node* p, node* s); //remove case 3: parent, sibling & its children are black
