@@ -641,7 +641,7 @@ int RBTree::rcaseSBsrRNL(node* n, node* p, node* s){
       }
     }
   }
-  else if(p->right == n){
+  /*  else if(p->right == n){
     if(s != NULL){
       //sibling is black
       if(s->color == 'B'){
@@ -657,7 +657,7 @@ int RBTree::rcaseSBsrRNL(node* n, node* p, node* s){
 	}
       }
     }
-  }   
+    } */  
   return 0;
 }
 
