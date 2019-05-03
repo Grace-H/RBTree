@@ -191,6 +191,12 @@ int RBTree::remove(int data){
     //if todelete is black-->child is now doubleblack
     else if(todelete->color == 'B'){
       cout << "remove(): todelete is B" << endl;
+      if(child != NULL)
+	cout << "child: " << child->data << child->color << endl;
+      else
+	cout << "child is NULL" << endl;
+      cout << "found: " << found->data << found->color << endl;
+      cout << "todelete: " << todelete->data << todelete->color << endl;
       if(todelete->parent == NULL){
 	cout << "todelete is black" << endl;
 	//get family members in case child is NULL
@@ -230,7 +236,7 @@ int RBTree::remove(int data){
 	  rcasePNULL(child, parent, sibling);
 	}
       }
-
+      //      else if(found->right == 
       else if(todelete->parent->color == 'B'){
 cout << "todelete's parent is black" << endl;
 	//get family members in case child is NULL
