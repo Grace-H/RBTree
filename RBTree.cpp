@@ -197,7 +197,17 @@ int RBTree::remove(int data){
 	cout << "child is NULL" << endl;
       cout << "found: " << found->data << found->color << endl;
       cout << "todelete: " << todelete->data << todelete->color << endl;
-      if(todelete->parent == NULL){
+      if(todelete == head && todelete->parent == NULL && todelete->left == NULL && todelete->right == NULL){
+	head = NULL;
+	delete todelete;
+      }
+      else if(todelete == head && todelete->parent == NULL && todelete->left == NULL){
+	child->parent = NULL;
+	head = child;
+	child->color = 'B';
+	delete todelete;
+      }
+      else if(todelete->parent == NULL){
 	cout << "todelete is black" << endl;
 	//get family members in case child is NULL
 	node* parent = todelete->parent;
@@ -268,7 +278,26 @@ cout << "todelete's parent is black" << endl;
 	//begin cases
 	cout << "parent is black, beginning cases" << endl;
 	if(child == NULL){
-	  rcasePNULL(parent, parent->parent, getSibling(parent));
+	  node* temp = new node;
+	  temp->color = 'B';
+	  temp->data = 0;
+	  temp->parent = parent;
+	  temp->left = NULL;
+	  temp->right = NULL;
+	  if(parent->right == sibling){
+	    parent->left = temp;
+	  }
+	  else{
+	    parent->right = temp;
+	  }
+	  rcasePNULL(temp, parent, sibling);
+	  if(parent->right == temp){
+	    parent->right = NULL;
+	  }
+	  else{
+	    parent->left = NULL;
+	  }
+	  delete temp;
 	}
 	else if(child->color == 'R'){
 	  child->color = 'B';
@@ -385,6 +414,7 @@ int RBTree::rcaseSR(node* n, node* p, node* s){
       s->color = 'B';
       cout << "rcaseSR(): swapped colors: PR SB" << endl;
       visualize();
+      cout << "rcaseSR(): visualized" << endl;
       if(p->right == n){
 	cout << "rcaseSR(): rotating right" << endl;
 	if(n == NULL){
@@ -464,6 +494,9 @@ int RBTree::rcasePBSBsBsB(node* n, node* p, node* s){
 	    s->color = 'R';
 	    rcasePNULL(p, p->parent, getSibling(p));
 	  }
+	  else{
+	    rcasePRSBsBsB(n, p, s);
+	  }
 	}
 	else if(s->right->color == 'B' && s->left->color == 'B'){
 	  s->color = 'R';
@@ -524,10 +557,15 @@ int RBTree::rcasePRSBsBsB(node* n, node* p, node* s){
 	  }
 	}
 	else if(s->right == NULL){
+	  cout << "rcasePRSBsBsB() ln 547: right is NULL" << endl;
 	  if(s->left->color == 'B'){
 	    cout << "rcasePRSBsBsB(): right is NULL" << endl;
 	    s->color = 'R';
 	    p->color = 'B';
+	  }
+	  else{
+	    cout << "rcasePRSBsBsB() ln 554: moving on to case 5" << endl;
+	    rcaseSBsRsBNL(n, p, s);
 	  }
 	}
 	else if(s->right->color == 'B' && s->left->color == 'B'){
@@ -610,6 +648,7 @@ int RBTree::rcaseSBsRsBNL(node* n, node* p, node* s){
       }
     }
   }
+  visualize();
   rcaseSBsrRNL(n, p, getSibling(n));
   return 0;
 }
@@ -633,14 +672,15 @@ int RBTree::rcaseSBsrRNL(node* n, node* p, node* s){
 	    cout << "rcaseSBsrRNL(): p is " << p->data << p->color << endl;
 	    cout << "rcaseSBsrRNL(): p->right is " << p->right->data << p->right->color << endl;
 	    cout << "rcaseSBsrRNL(): p->left is " << p->left->data << p->left->color << endl;
-	    node* twenty = locate(24, head);
-	    cout << "twentyfour: " << twenty->color << twenty->parent->data << endl;
+	    //node* twenty = locate(24, head);
+	    //cout << "twentyfour: " << twenty->color << twenty->parent->data << endl;
 	    rotateL(p);
 	    visualize();
 	    cout << "rcaseSBsrRNL(): ^rotated left" << endl;
 	    char pcolor = p->color;
 	    p->color = s->color;
 	    s->color = pcolor;
+	    s->right->color = 'B';
 	    cout << "P is s's color & vice versa" << endl;
 	  }
 	}
@@ -659,6 +699,7 @@ int RBTree::rcaseSBsrRNL(node* n, node* p, node* s){
 	    char pcolor = p->color;
 	    p->color = s->color;
 	    s->color = pcolor;
+	    s->left->color = 'B';
 	  }
 	}
       }
@@ -846,6 +887,7 @@ int RBTree::visualize(){
 //uses recursion to print tree horizontally:
 //left side printed first, lower levels on the right
 int RBTree::visualize(node* cur, int level){
+  //cout << "visualize(): cur is: " << cur->data << endl;
   if(head != NULL){
   //if has left child, go left
     if(cur->right != NULL){
@@ -860,6 +902,7 @@ int RBTree::visualize(node* cur, int level){
     //if right child go right
     if(cur->left != NULL){
       int newlevel = level + 1;
+      //cout << "visualize(): going left" << endl;
       visualize(cur->left, newlevel);
     }
   }
