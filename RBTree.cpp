@@ -1,7 +1,7 @@
 /*Class RBTree, implementation of a Red-Black Tree
  *Cases for insertion and deletion were learned from https://en.wikipedia.org/wiki/Red-Black_Tree
  *Author: Grace Hunter
- *Date: 19 April 2019
+ *Date: 9 May 2019
  */
 
 #include <cstring>
@@ -17,9 +17,9 @@ RBTree::RBTree(){
 
 //destructor
 RBTree::~RBTree(){
-  //while(head != NULL){
-  //remove(head->data);
-  //}
+  while(head != NULL){
+    remove(head->data);
+  }
 }
 
 //rotate right with given node as root
@@ -105,17 +105,14 @@ node* RBTree::getSibling(node* n){
   //if parent exists
   if(n->parent != NULL){
     if(n->parent->right == n){
-      cout << "getSibling(): returning left" << endl;
       return n->parent->left;
     }
     else{
-      cout << "getSibling(): returning right" << endl;
       return n->parent->right;
     }
   }
   //else return NULL
   else{
-    cout << "returning NULL" << endl;
     return NULL;
   }
 }
@@ -143,8 +140,6 @@ node* RBTree::getParent(node* n){
 
 //remove node with given data
 int RBTree::remove(int data){
-  cout << "CURRENT DATA NUMBER TO REMOVE: " << data << endl;
-  visualize();
   //get node with value
   node* found = locate(data, head);
   //cout << "found: " << found->data << endl;
@@ -163,13 +158,9 @@ int RBTree::remove(int data){
     else{
       child = todelete->right;
     }
-    cout << "todelete: " << todelete->data << todelete->color << endl;
-    //cout << "found: " << found->data << endl;
-    //cout << "child: " << child->data << endl;
     
     //if todelete is red
     if(todelete->color == 'R'){
-      cout << "todelete is red" << endl;
       //change child & parent pointers
       if(todelete->parent->left == todelete){
 	todelete->parent->left = child;
@@ -190,25 +181,20 @@ int RBTree::remove(int data){
     
     //if todelete is black-->child is now doubleblack
     else if(todelete->color == 'B'){
-      cout << "remove(): todelete is B" << endl;
-      if(child != NULL)
-	cout << "child: " << child->data << child->color << endl;
-      else
-	cout << "child is NULL" << endl;
-      cout << "found: " << found->data << found->color << endl;
-      cout << "todelete: " << todelete->data << todelete->color << endl;
+      //if todelete is only node in tree
       if(todelete == head && todelete->parent == NULL && todelete->left == NULL && todelete->right == NULL){
 	head = NULL;
 	delete todelete;
       }
+      //if todelete is head and has no left child
       else if(todelete == head && todelete->parent == NULL && todelete->left == NULL){
 	child->parent = NULL;
 	head = child;
 	child->color = 'B';
 	delete todelete;
       }
+      //if todelete has no parent but has a left child
       else if(todelete->parent == NULL){
-	cout << "todelete is black" << endl;
 	//get family members in case child is NULL
 	node* parent = todelete->parent;
 	node* sibling;
@@ -235,7 +221,6 @@ int RBTree::remove(int data){
 	
 	//CHILD IS DOUBLE BLACK
 	//begin cases
-	cout << "beginning cases" << endl;
 	if(child == NULL){
 	  rcasePNULL(parent, parent->parent, getSibling(parent));
 	}
@@ -246,9 +231,9 @@ int RBTree::remove(int data){
 	  rcasePNULL(child, parent, sibling);
 	}
       }
-      //      else if(found->right == 
+
+      //if the parent is black
       else if(todelete->parent->color == 'B'){
-cout << "todelete's parent is black" << endl;
 	//get family members in case child is NULL
 	node* parent = todelete->parent;
 	node* sibling;
@@ -276,7 +261,6 @@ cout << "todelete's parent is black" << endl;
 	//CHILD IS DOUBLE BLACK
 
 	//begin cases
-	cout << "parent is black, beginning cases" << endl;
 	if(child == NULL){
 	  node* temp = new node;
 	  temp->color = 'B';
@@ -309,7 +293,6 @@ cout << "todelete's parent is black" << endl;
       
       //if todelete's parent is red
       else if(todelete->parent->color == 'R'){
-	cout << "remove(): todelete is black and parent is red" << endl;
 	//change child & parent pointers
 	if(todelete->parent->left == todelete){
 	  todelete->parent->left = child;
@@ -386,13 +369,10 @@ int RBTree::rcaseNoChild(node* p){
   return 0;
 }
 
+//case 1: parent is NULL
+//n is new head, else move on
 int RBTree::rcasePNULL(node* n, node* p, node* s){
   if(p != NULL){
-    cout << "rcasePNULL(): n is " << n->color << endl;
-    if(n == NULL){
-      cout << "rcasePNULL(): n is NULL" << endl;
-    }
-    cout << "rcasePNULL(): moving to rcase(n,p,s);" << endl;
     rcaseSR(n, p, s);
   }
   else{
@@ -403,84 +383,42 @@ int RBTree::rcasePNULL(node* n, node* p, node* s){
 
 //remove case 2: sibling is red, calls case 3
 int RBTree::rcaseSR(node* n, node* p, node* s){
-  if(n == NULL){
-    cout << "rcaseSR(): n is NULL at beginning of fn" << endl;
-  }
-  cout << "rcaseSR(): n is " << n->color << endl;
   if(s != NULL){
+    //if s is red, swap colors with p and rotate
     if(s->color == 'R'){
-      cout << "rcaseSR(): s is R" << endl;
       p->color = 'R';
       s->color = 'B';
-      cout << "rcaseSR(): swapped colors: PR SB" << endl;
-      visualize();
-      cout << "rcaseSR(): visualized" << endl;
       if(p->right == n){
-	cout << "rcaseSR(): rotating right" << endl;
-	if(n == NULL){
-	  cout << "rcaseSR(): n is NULL before rotating right" << endl;
-	}
 	rotateR(p);
-	if(n == NULL){
-	  cout << "rcaseSR(): n is NULL after rotating right" << endl;
-	}
       }
       else{
-	cout << "rcaseSR(): rotating left" << endl;
-	if(n == NULL){
-	  cout << "rcaseSR(): n is NULL before rotating left" << endl;
-	}
 	rotateL(p);
-	visualize();
-	if(n == NULL){
-	  cout << "rcaseSR(): n is NULL after rotating left" << endl;
-	}
       }
     }
   }
-  if(n == NULL){
-    cout << "rcaseSR(): n is NULL" << endl;
-  }
-  cout << "moving to next case rcasePBSBsBsB()" << endl;
 
+  //go to case three with a new sibling
   node* gotten = getSibling(n);
-  cout << "rcaseSR(): got sibling" << endl;
-  if(gotten == NULL){
-    cout << "rcaseSR(): gotten is NULL" << endl;
-  }
   rcasePBSBsBsB(n, p, getSibling(n));
   return 0;
 }
 
 //remove case 3: sibling, parent, and sibling's children are black
+//paint sibling red and go to case 1 with parent, else move on
 int RBTree::rcasePBSBsBsB(node* n, node* p, node* s){
-  cout << "case 3" << endl;
-  if(s == NULL){
-    cout << "rcasePBSBsBsB(): s is NULL" << endl;
-  }
-  else{
-    if(s->left == NULL){
-      cout << "rcasePBSBsBsB(): left is NULL" << endl;
-    }
-    else{
-      cout << "rcasePBSBsBsB(): left is " << s->left->color << endl;
-    }
-    if(s->right == NULL){
-      cout << "rcasePBSBsBsB(): right is NULL" << endl;
-    }
-    else{
-      cout << "rcasePBSBsBsB(): right is " << s->right->color << endl;
-    }
-  }
-  cout << "rcasePBSBsBsB(): begining to evaluate: case 3" << endl;
+  //if parent is black
   if(p->color == 'B'){
     if(s != NULL){
+      //if sibling is black
       if(s->color == 'B'){
+	//if sibling left child is black (NULL)
 	if(s->left == NULL){
+	  //if sibling right child is black (NULL)
 	  if(s->right == NULL){
 	    s->color = 'R';
 	    rcasePNULL(p, p->parent, getSibling(p));
 	  }
+	  //if right child is black
 	  else if(s->right->color == 'B'){
 	    s->color = 'R';
 	    rcasePNULL(p, p->parent, getSibling(p));
@@ -489,6 +427,7 @@ int RBTree::rcasePBSBsBsB(node* n, node* p, node* s){
 	    rcasePRSBsBsB(n, p, s);
 	  }
 	}
+	//if right child is black (NULL)
 	else if(s->right == NULL){
 	  if(s->left->color == 'B'){
 	    s->color = 'R';
@@ -498,6 +437,7 @@ int RBTree::rcasePBSBsBsB(node* n, node* p, node* s){
 	    rcasePRSBsBsB(n, p, s);
 	  }
 	}
+	//if both are black
 	else if(s->right->color == 'B' && s->left->color == 'B'){
 	  s->color = 'R';
 	  rcasePNULL(p, p->parent, getSibling(p));
@@ -521,86 +461,67 @@ int RBTree::rcasePBSBsBsB(node* n, node* p, node* s){
 }
 
 //remove case 4: parent is red, but s and s's children are black
+//swap colors of s and p, else/then move on to case 5
 int RBTree::rcasePRSBsBsB(node* n, node* p, node* s){
-  cout << "rcasePRSBsBsB()" << endl;
-  if(p == NULL){
-    cout << "rcasePRSBsBsB(): p is NULL" << endl;
-  }
-  if(s == NULL){
-    cout << "rcasePRSBsBsB(): sibling is NULL" << endl;
-}
-  else{
-    if(s->right == NULL)
-      cout << "rcasePRSBsBsB(): sibling right child is NULL" << endl;
-    if(s->left == NULL)
-      cout << "rcasePRSBsBsB(): sibling left child is NULL" << endl;
-  }
+  //if parent is red
   if(p->color == 'R'){
     if(s != NULL){
+      //if sibling is black
       if(s->color == 'B'){
-	cout << "rcasePRSBsBsB(): I got here" << endl;
+	//if sibling left child is black (NULL)
 	if(s->left == NULL){
-	  cout << "rcasePRSBsBsB(): left child is NULL" << endl;
+	  //if sibling right child is black (NULL)
 	  if(s->right == NULL){
 	    s->color = 'R';
 	    p->color = 'B';
-	    cout << "rcasePRSBsBsB(): swapped colors" << endl;
 	  }
+	  //if right child is black
 	  else if(s->right->color == 'B'){
 	    s->color = 'R';
 	    p->color = 'B';
-	    cout << "rcasePRSBsBsB(): swapped colors" << endl;
 	  }
 	  else{
-	    cout << "rcasePRSBsBsB(): moving to next case" << endl;
 	    rcaseSBsRsBNL(n, p, s);
 	  }
 	}
+	//if right child is black (NULL)
 	else if(s->right == NULL){
-	  cout << "rcasePRSBsBsB() ln 547: right is NULL" << endl;
+	  //if left child is black
 	  if(s->left->color == 'B'){
-	    cout << "rcasePRSBsBsB(): right is NULL" << endl;
 	    s->color = 'R';
 	    p->color = 'B';
 	  }
 	  else{
-	    cout << "rcasePRSBsBsB() ln 554: moving on to case 5" << endl;
 	    rcaseSBsRsBNL(n, p, s);
 	  }
 	}
+	//if both are black
 	else if(s->right->color == 'B' && s->left->color == 'B'){
-	  cout << "rcasePRSBsBsB(): both are black" << endl;
 	  s->color = 'R';
 	  p->color = 'B';
 	}
 	else{
-	  cout << "rcasePRSBsBsB(): moving on" << endl;;
 	  rcaseSBsRsBNL(n, p, s);
 	}
       }
       else{
-	cout << "rcasePRSBsBsB(): doing else becuase sibling was NULL" << endl;
-	cout << "rcasePRSBsBsB(): moving on" << endl;
 	rcaseSBsRsBNL(n, p, s);
       }
     }
     else{
-      cout << "rcasePRSBsBsB(): moving on" << endl;
       rcaseSBsRsBNL(n, p, s);
     }
   }
   else{
-    cout << "rcasePRSBsBsB(): moving on" << endl;
     rcaseSBsRsBNL(n, p, s);
   }
   return 0;
 }
 
-
 //case 5: sibling is black, sibling's left child is red,
 //sibling's right child is black, and n is left child of parent
+//if child is on inside, move to outside by rotating before going to case 6
 int RBTree::rcaseSBsRsBNL(node* n, node* p, node* s){
-  cout << "case5" << endl;
   //if n is left child of parent
   if(p->left == n){
     if(s != NULL){
@@ -609,12 +530,13 @@ int RBTree::rcaseSBsRsBNL(node* n, node* p, node* s){
 	//siblings's left child is red
 	if(s->left != NULL){
 	  if(s->left->color == 'R'){
-	    //if s's right child is black
+	    //if s's right child is black (NULL)
 	    if(s->right == NULL){
 	      rotateR(s);
 	      s->color = 'R';
 	      s->parent->color = 'B';
 	    }
+	    //right child is black
 	    else if(s->right->color == 'B'){
 	      rotateR(s);
 	      s->color = 'R';
@@ -625,6 +547,7 @@ int RBTree::rcaseSBsRsBNL(node* n, node* p, node* s){
       }
     }
   }
+  //if n is right child of parent
   else if(p->right == n){
     if(s != NULL){
       //sibling is black
@@ -638,6 +561,7 @@ int RBTree::rcaseSBsRsBNL(node* n, node* p, node* s){
 	       s->color = 'R';
 	       s->parent->color = 'B';
 	     }
+	     //left child is black
 	     else if(s->left->color == 'B'){
 	       rotateL(s);
 	       s->color = 'R';
@@ -648,45 +572,34 @@ int RBTree::rcaseSBsRsBNL(node* n, node* p, node* s){
       }
     }
   }
-  visualize();
+  //move on to case 6
   rcaseSBsrRNL(n, p, getSibling(n));
   return 0;
 }
 
 //case 6: sibling is black, sibling's right child is red, node is left child
+//rotate and swap colors of p and s
 int RBTree::rcaseSBsrRNL(node* n, node* p, node* s){
-  cout << "case6" << endl;
+  //n is left child
   if(p->left == n){
-    cout << "rcaseSBsrRNL(): n is left child" << endl;
     if(s != NULL){
       //sibling is black
       if(s->color == 'B'){
-	cout << "rcaseSBsrRNL(): s is B" << endl;
 	//s's right child is red
 	if(s->right != NULL){
 	  if(s->right->color == 'R'){
-	    cout << "rcaseSBsrRNL(): sr is R" << endl;
 	    //rotate L and swap colors
-	    visualize();
-	    cout << "rcaseSBsrRNL(): n is " << n->data << n->color << endl;
-	    cout << "rcaseSBsrRNL(): p is " << p->data << p->color << endl;
-	    cout << "rcaseSBsrRNL(): p->right is " << p->right->data << p->right->color << endl;
-	    cout << "rcaseSBsrRNL(): p->left is " << p->left->data << p->left->color << endl;
-	    //node* twenty = locate(24, head);
-	    //cout << "twentyfour: " << twenty->color << twenty->parent->data << endl;
 	    rotateL(p);
-	    visualize();
-	    cout << "rcaseSBsrRNL(): ^rotated left" << endl;
 	    char pcolor = p->color;
 	    p->color = s->color;
 	    s->color = pcolor;
 	    s->right->color = 'B';
-	    cout << "P is s's color & vice versa" << endl;
 	  }
 	}
       }
     }
   }
+  //n is right child
   else if(p->right == n){
     if(s != NULL){
       //sibling is black

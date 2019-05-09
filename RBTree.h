@@ -1,6 +1,6 @@
 /*header file for RBTree, implementation of a Red Black Tree
  *Author: Grace Hunter
- *Date: 26 March 2019
+ *Date: 9 May 2019
  */
 
 #include <cstring>

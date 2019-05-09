@@ -1,6 +1,6 @@
-/*Uses Binary Search Tree to store integer values
+/*Uses Red-Black Tree to store integer values
  *Author: Grace Hunter
- *Date: 24 March 2019
+ *Date: 9 May 2019
  */
 
 #include <cstring>
@@ -117,9 +117,10 @@ int main(){
       delete [] nums;
       delete [] quitstr;
       delete [] printstr;
-      //delete [] removestr;
+      delete [] removestr;
       delete [] addstr;
       delete [] readstr;
+      delete [] searchstr;
       //delete tree;
     }  
     else{
@@ -180,3 +181,4 @@ int insert(RBTree* tree, char* nums){
   tree->visualize();
   return 0;
 }
+
